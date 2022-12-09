@@ -1,31 +1,38 @@
 {
-  "name": "rest-users-products-api",
-  "version": "1.0.0",
-  "description": "Products REST Api w/ auth & users",
-  "main": "index.js",
-  "repository": "https://github.com/kchn9/rest-users-products-api.git",
-  "author": "kchn9",
-  "license": "MIT",
-  "private": true,
-  "scripts": {
-    "start": "tsc",
-    "dev": "ts-node-dev --respawn --transpile-only src/app.ts"
-  },
-  "dependencies": {
-    "config": "3.3.8",
-    "dotenv": "16.0.3",
-    "express": "4.18.2",
-    "mongoose": "6.8.0"
-  },
-  "devDependencies": {
-    "@types/config": "3.3.0",
-    "@types/express": "4.17.14",
-    "@types/node": "18.11.12",
-    "@typescript-eslint/eslint-plugin": "^5.46.0",
-    "@typescript-eslint/parser": "^5.46.0",
-    "eslint": "^8.29.0",
-    "prettier": "^2.8.1",
-    "ts-node-dev": "2.0.0",
-    "typescript": "4.9.4"
-  }
+    "name": "rest-users-products-api",
+    "version": "1.0.0",
+    "description": "Products REST Api w/ auth & users",
+    "main": "index.js",
+    "repository": "https://github.com/kchn9/rest-users-products-api.git",
+    "author": "kchn9",
+    "license": "MIT",
+    "private": true,
+    "scripts": {
+        "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+        "build": "rm -rf dist && tsc"
+    },
+    "dependencies": {
+        "config": "3.3.8",
+        "dotenv": "16.0.3",
+        "express": "4.18.2",
+        "module-alias": "2.2.2",
+        "moment": "2.29.4",
+        "mongoose": "6.8.0",
+        "pino": "8.7.0",
+        "pino-pretty": "9.1.1"
+    },
+    "devDependencies": {
+        "@types/config": "3.3.0",
+        "@types/express": "4.17.14",
+        "@types/node": "18.11.12",
+        "@typescript-eslint/eslint-plugin": "5.46.0",
+        "@typescript-eslint/parser": "5.46.0",
+        "eslint": "8.29.0",
+        "prettier": "2.8.1",
+        "ts-node-dev": "2.0.0",
+        "typescript": "4.9.4"
+    },
+    "_moduleAliases": {
+        "@/utils": "dist/src/utils"
+    }
 }
