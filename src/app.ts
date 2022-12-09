@@ -1,9 +1,10 @@
 import express from "express";
 import config from "config";
+import { establishDatabaseConnection } from "./utils/dbConnect";
 
 const app = express();
-const port = config.get<number>("port");
+const { port } = config.get<{ port: number }>("server");
 
-app.listen(port, () => {
-  console.log("app is running");
+app.listen(port, async () => {
+  await establishDatabaseConnection();
 });
