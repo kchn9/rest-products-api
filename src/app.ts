@@ -1,9 +1,9 @@
 import Controller from "./interfaces/controller.interface";
 import express, { Application } from "express";
+import errorMiddleware from "./middleware/error.middleware";
 import logger from "@/utils/logger";
 import config from "config";
 import mongoose from "mongoose";
-import morgan from "morgan";
 
 class App {
     private app: Application;
@@ -20,7 +20,7 @@ class App {
 
     private initializeMiddleware() {
         this.app.use(express.json());
-        this.app.use(morgan("tiny"));
+        this.app.use(errorMiddleware());
     }
 
     private async establishDatabaseConnection(): Promise<void> {

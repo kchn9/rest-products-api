@@ -1,6 +1,7 @@
 import Controller from "@/interfaces/controller.interface";
 import validationMiddleware from "@/middleware/validation.middleware";
 import UserService from "@/services/user.service";
+import HttpError from "@/utils/errors/HttpError";
 import userValidator, { CreateUserInput } from "@/validators/user.validator";
 import { NextFunction, Request, Response, Router } from "express";
 
@@ -38,7 +39,7 @@ class UserController implements Controller {
             const users = await this.UserService.findAll();
             res.status(200).json(users);
         } catch (e) {
-            next(e);
+            next(new Error("Unable to get all user records"));
         }
     };
 
@@ -51,7 +52,12 @@ class UserController implements Controller {
             const user = await this.UserService.create(req.body);
             res.status(201).json(user);
         } catch (e) {
-            next(e);
+            next(
+                new HttpError(
+                    409,
+                    "Unable to create new user, potential conflict"
+                )
+            );
         }
     };
 }
