@@ -11,11 +11,11 @@ export interface IUser {
     updatedAt: number;
 }
 
-interface IUserMethods {
+export interface IUserMethods {
     comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
-type UserModel = Model<IUser, unknown, IUserMethods>;
+type UserModel = Model<IUser, object, IUserMethods>;
 
 const userSchema = new Schema<IUser, UserModel, IUserMethods>(
     {
@@ -37,6 +37,22 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
     { timestamps: true }
 );
 
+// login method
+userSchema.methods.comparePassword = async function (
+    candidatePassword: string
+): Promise<boolean> {
+    try {
+        const isPasswordCorrect = await bcrypt.compare(
+            candidatePassword,
+            this.password
+        );
+        return isPasswordCorrect;
+    } catch (e) {
+        logger.error(e);
+        return false;
+    }
+};
+
 // hash user password before save
 userSchema.pre(
     "save",
@@ -55,24 +71,6 @@ userSchema.pre(
     }
 );
 
-// login method
-userSchema.method(
-    "comparePassword",
-    async function (candidatePassword: string): Promise<boolean> {
-        try {
-            const user = this as HydratedDocument<IUser>;
-            const isPasswordCorrect = await bcrypt.compare(
-                candidatePassword,
-                user.password
-            );
-            return isPasswordCorrect;
-        } catch (e) {
-            logger.error(e);
-            return false;
-        }
-    }
-);
-
 userSchema.set("toJSON", {
     transform(_doc, ret) {
         delete ret["password"];
@@ -80,4 +78,4 @@ userSchema.set("toJSON", {
     },
 });
 
-export default model<IUser>("user", userSchema);
+export default model<IUser, UserModel>("user", userSchema);
