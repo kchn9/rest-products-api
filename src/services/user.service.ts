@@ -35,6 +35,7 @@ class UserService implements Service<IUser> {
             ) {
                 throw new HttpError(409, "Unable to create user");
             }
+            throw e;
         }
     }
 }
