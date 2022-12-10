@@ -21,6 +21,7 @@
         "moment": "2.29.4",
         "mongoose": "6.8.0",
         "pino": "8.7.0",
+        "pino-http": "8.2.1",
         "pino-pretty": "9.1.1",
         "ts-node": "10.9.1",
         "zod": "3.19.1"

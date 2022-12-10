@@ -4,6 +4,8 @@ import errorMiddleware from "./middleware/error.middleware";
 import logger from "@/utils/logger";
 import config from "config";
 import mongoose from "mongoose";
+import deserializeUserMiddleware from "./middleware/deserializeUser.middleware";
+import httpLoggerMiddleware from "./middleware/httpLogger.middleware";
 
 class App {
     private app: Application;
@@ -20,6 +22,8 @@ class App {
 
     private initializeMiddleware() {
         this.app.use(express.json());
+        this.app.use(httpLoggerMiddleware());
+        // this.app.use(deserializeUserMiddleware());
         this.app.use(errorMiddleware());
     }
 
