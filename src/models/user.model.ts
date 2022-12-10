@@ -11,13 +11,13 @@ export interface IUser {
     updatedAt: number;
 }
 
-export interface IUserMethods {
+interface IUserMethods {
     comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
-export type UserModelType = Model<IUser, unknown, IUserMethods>;
+type UserModel = Model<IUser, unknown, IUserMethods>;
 
-const userSchema: Schema = new Schema<IUser>(
+const userSchema = new Schema<IUser, UserModel, IUserMethods>(
     {
         username: {
             type: String,
