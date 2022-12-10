@@ -1,6 +1,6 @@
 import Service from "@/interfaces/service.interface";
 import UserModel, { IUser } from "@/models/user.model";
-import { Model } from "mongoose";
+import mongoose, { Model } from "mongoose";
 import HttpError from "@/utils/errors/HttpError";
 
 class UserService implements Service<IUser> {
@@ -14,7 +14,7 @@ class UserService implements Service<IUser> {
             const users = await this.model.find({});
             return users;
         } catch (e: unknown) {
-            throw new HttpError(500, "Unable to get all user records");
+            throw e;
         }
     }
 
@@ -29,7 +29,12 @@ class UserService implements Service<IUser> {
             const user = await this.model.create(newUser);
             return user;
         } catch (e: unknown) {
-            throw new HttpError(409, "Unable to create user");
+            if (
+                e instanceof mongoose.mongo.MongoServerError &&
+                e.code === 11000
+            ) {
+                throw new HttpError(409, "Unable to create user");
+            }
         }
     }
 }
