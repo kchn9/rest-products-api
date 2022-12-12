@@ -1,4 +1,5 @@
 import Controller from "@/interfaces/controller.interface";
+import protectedMiddleware from "@/middleware/protected.middleware";
 import validationMiddleware from "@/middleware/validation.middleware";
 import UserService from "@/services/user.service";
 import userValidator, { CreateUserInput } from "@/validators/user.validator";
@@ -17,7 +18,7 @@ class UserController implements Controller {
         /**
          * @route GET /api/users
          */
-        this.router.get(this.path, this.findAll);
+        this.router.get(this.path, protectedMiddleware(), this.findAll);
 
         /**
          * @route POST /api/users
