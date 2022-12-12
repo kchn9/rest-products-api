@@ -1,5 +1,4 @@
 import Controller from "@/interfaces/controller.interface";
-import DecodedToken from "@/interfaces/decodedToken.interface";
 import protectedMiddleware from "@/middleware/protected.middleware";
 import validationMiddleware from "@/middleware/validation.middleware";
 import SessionService from "@/services/session.service";
@@ -76,7 +75,7 @@ class SessionController implements Controller {
         next: NextFunction
     ) => {
         try {
-            const user: DecodedToken = res.locals.user;
+            const user = res.locals.user;
             const sessions = await this.SessionService.findUserSessions({
                 user: user._id,
                 valid: true,
@@ -95,7 +94,7 @@ class SessionController implements Controller {
         next: NextFunction
     ) => {
         try {
-            const { sessionId } = res.locals.user as DecodedToken;
+            const { sessionId } = res.locals.user;
             await this.SessionService.update(
                 {
                     _id: sessionId,

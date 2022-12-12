@@ -1,4 +1,3 @@
-import DecodedToken from "@/interfaces/decodedToken.interface";
 import Service from "@/interfaces/service.interface";
 import SessionModel, { ISession } from "@/models/session.model";
 import { IUser, IUserMethods } from "@/models/user.model";
@@ -75,9 +74,7 @@ class SessionService implements Service<ISession> {
      * Finds specific user sessions
      * @param {FilterQuery<ISession>} query
      */
-    public async findUserSessions(
-        query: FilterQuery<ISession>
-    ): Promise<ISession[] | void> {
+    public async findUserSessions(query: FilterQuery<ISession>) {
         try {
             const sessions = await this.model.find(query);
             return sessions;
@@ -94,7 +91,7 @@ class SessionService implements Service<ISession> {
     public async update(
         query: FilterQuery<ISession>,
         update: UpdateQuery<ISession>
-    ): Promise<void> {
+    ) {
         try {
             await this.model.updateOne(query, update);
         } catch (e) {
@@ -111,7 +108,7 @@ class SessionService implements Service<ISession> {
             // verify token
             const { decoded } = jwtUtils.verifyJWT(refreshToken);
             if (!decoded || typeof decoded === "string") return false;
-            const decodedToken = decoded as DecodedToken;
+            const decodedToken = decoded;
 
             // get session & verify
             const session = (await this.model.findById(

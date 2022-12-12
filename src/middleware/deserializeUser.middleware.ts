@@ -1,17 +1,10 @@
 import SessionService from "@/services/session.service";
 import jwtUtils from "@/utils/jwt.utils";
 import { NextFunction, Request, Response } from "express";
-import { JwtPayload } from "jsonwebtoken";
 
 /**
  * Responsible for extracting the access token from header and refreshing it
  */
-
-type Token = {
-    valid: boolean;
-    expired: boolean;
-    decoded: JwtPayload | string | null;
-};
 
 const deserializeUserMiddleware =
     () => async (req: Request, res: Response, next: NextFunction) => {
@@ -19,7 +12,7 @@ const deserializeUserMiddleware =
         if (!bearerHeader) return next();
 
         const accessToken: string = bearerHeader.replace(/^Bearer\s/, "");
-        const verifiedToken: Token = jwtUtils.verifyJWT(accessToken);
+        const verifiedToken = jwtUtils.verifyJWT(accessToken);
         const { expired: isExpired, decoded: decodedToken } = verifiedToken;
 
         if (decodedToken) res.locals.user = decodedToken;
@@ -33,7 +26,7 @@ const deserializeUserMiddleware =
             );
             if (!accessToken) return next();
             res.setHeader("x-access-token", accessToken);
-            const verifiedToken: Token = jwtUtils.verifyJWT(accessToken);
+            const verifiedToken = jwtUtils.verifyJWT(accessToken);
             const { valid, decoded: decodedToken } = verifiedToken;
             if (!valid || !decodedToken || typeof decodedToken === "string")
                 return next();

@@ -1,14 +1,31 @@
 import { Request, Response, NextFunction } from "express";
 import HttpError from "@/utils/errors/HttpError";
-import DecodedToken from "@/interfaces/decodedToken.interface";
+import SessionService from "@/services/session.service";
 
 const protectedMiddleware =
-    () => (_req: Request, res: Response, next: NextFunction) => {
-        const decodedToken: DecodedToken = res.locals.user;
-        if (decodedToken) {
-            return next();
+    () => async (_req: Request, res: Response, next: NextFunction) => {
+        const token = res.locals.user;
+        try {
+            if (!token || !token.sessionId) {
+                throw new HttpError(
+                    403,
+                    "You are not authorized to access this route"
+                );
+            }
+            const sessions = await new SessionService().findUserSessions({
+                _id: token.sessionId,
+            });
+            if (!sessions || !sessions[0].valid) {
+                throw new HttpError(
+                    403,
+                    "You are not authorized to access this route"
+                );
+            }
+        } catch (e) {
+            next(e);
         }
-        throw new HttpError(403, "You are not authorized to access this route");
+
+        next();
     };
 
 export default protectedMiddleware;
