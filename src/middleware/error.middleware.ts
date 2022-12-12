@@ -2,19 +2,23 @@ import { Request, Response, NextFunction } from "express";
 import HttpError from "@/utils/errors/HttpError";
 import logger from "@/utils/logger";
 
-const errorMiddleware =
-    () =>
-    (err: HttpError, _req: Request, res: Response, next: NextFunction) => {
-        logger.error(err.message);
+function errorMiddleware(
+    error: HttpError,
+    _req: Request,
+    res: Response,
+    next: NextFunction
+): void {
+    logger.error(error);
 
-        const status = err.status || 500;
-        const message = err.message;
+    const status = error.status || 500;
+    const message = error.message || "Something went wrong";
 
-        res.status(400).send({
-            status,
-            message,
-        });
-        next();
-    };
+    res.status(status).send({
+        status,
+        message,
+    });
+
+    next(error);
+}
 
 export default errorMiddleware;
