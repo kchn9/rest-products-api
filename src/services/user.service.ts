@@ -1,6 +1,7 @@
 import Service from "@/interfaces/service.interface";
 import UserModel, { IUser } from "@/models/user.model";
 import mongoose, { FilterQuery, Model } from "mongoose";
+import { CreateUserInput } from "@/validators/user.validator";
 import HttpError from "@/utils/errors/HttpError";
 
 class UserService implements Service<IUser> {
@@ -20,10 +21,10 @@ class UserService implements Service<IUser> {
 
     /**
      * Creates a user
-     * @param {IUser} newUser
+     * @param {CreateUserInput["body"]} newUser
      */
     public async create(
-        newUser: Omit<IUser, "createdAt" | "updatedAt">
+        newUser: CreateUserInput["body"]
     ): Promise<IUser | void> {
         try {
             const user = await this.model.create(newUser);
