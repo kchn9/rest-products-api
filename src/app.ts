@@ -16,15 +16,20 @@ class App {
         this.port = port;
 
         this.establishDatabaseConnection();
-        this.initializeMiddleware();
+        this.initializePreMiddleware();
         this.intializeControllers(controllers);
+        this.initializePostMiddleware();
     }
 
-    private initializeMiddleware() {
+    private initializePreMiddleware() {
         this.app.use(express.json());
+        this.app.use(express.urlencoded({ extended: false }));
         this.app.use(httpLoggerMiddleware());
-        // this.app.use(deserializeUserMiddleware());
-        this.app.use(errorMiddleware());
+        this.app.use(deserializeUserMiddleware());
+    }
+
+    private initializePostMiddleware() {
+        this.app.use(errorMiddleware);
     }
 
     private async establishDatabaseConnection(): Promise<void> {

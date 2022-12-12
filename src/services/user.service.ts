@@ -1,6 +1,6 @@
 import Service from "@/interfaces/service.interface";
 import UserModel, { IUser } from "@/models/user.model";
-import mongoose, { Model } from "mongoose";
+import mongoose, { FilterQuery, Model } from "mongoose";
 import HttpError from "@/utils/errors/HttpError";
 
 class UserService implements Service<IUser> {
@@ -33,8 +33,24 @@ class UserService implements Service<IUser> {
                 e instanceof mongoose.mongo.MongoServerError &&
                 e.code === 11000
             ) {
-                throw new HttpError(409, "Unable to create user");
+                throw new HttpError(409, "User already exists");
             }
+            throw e;
+        }
+    }
+
+    /**
+     * Finds specific user
+     * @param {FilterQuery<IUser>} query
+     */
+    public async findOne(query: FilterQuery<IUser>): Promise<IUser | void> {
+        try {
+            const user = await this.model.findOne(query);
+            if (!user) {
+                throw new HttpError(404, "User not found");
+            }
+            return user;
+        } catch (e) {
             throw e;
         }
     }
