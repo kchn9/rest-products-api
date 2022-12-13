@@ -6,6 +6,9 @@ import config from "config";
 import mongoose from "mongoose";
 import deserializeUserMiddleware from "./middleware/deserializeUser.middleware";
 import httpLoggerMiddleware from "./middleware/httpLogger.middleware";
+import helmet from "helmet";
+import cors from "cors";
+import compression from "compression";
 
 class App {
     private app: Application;
@@ -22,9 +25,12 @@ class App {
     }
 
     private initializePreMiddleware() {
+        this.app.use(helmet());
+        this.app.use(cors());
+        this.app.use(httpLoggerMiddleware());
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: false }));
-        this.app.use(httpLoggerMiddleware());
+        this.app.use(compression());
         this.app.use(deserializeUserMiddleware());
     }
 
