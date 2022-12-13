@@ -1,0 +1,442 @@
+{
+	"info": {
+		"_postman_id": "7c889c0e-5bd9-4875-8e80-9e7ec16d557d",
+		"name": "REST API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23397059"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Get all products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{endpoint}}/api/products",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get product",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{endpoint}}/api/products/{{productId}}",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"{{productId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Sets product id if res status is 201\", function () {",
+									"    if (pm.response.code === 201) {",
+									"        const res = pm.response.json();",
+									"        const productId = res._id;",
+									"        pm.collectionVariables.set(\"productId\", productId);",
+									"    }",
+									"})",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{newProductName}}\",\n    \"quantity\": {{newProductQuantity}},\n    \"price\": {{newProductPrice}},\n    \"description\": \"{{newProductDescription}}\",\n    \"image\": \"{{newProductImage}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{endpoint}}/api/products/",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"api",
+								"products",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update product",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"description\": \"@updated2: The GH5 II can capture 10-bit 4:2:0 4K/60p footage while simultaneously outputting 10-bit 4:2:2 to an external recorder. Since the camera uses the whole area of the sensor, there is no crop at 4K/60p. The V-Log L gamut is built into the camera, and numerous LUTs for VariCam color profiles can be installed, and two Cinelike gammas are also onboard. The camera supports anamorphic and Full HD 120 fps capture. The camera can also live-stream video over YouTube at up to 1080/60p via a smartphone connection.\" \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{endpoint}}/api/products/{{productId}}",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"{{productId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete product",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{endpoint}}/api/products/{{productId}}",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"{{productId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get all users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{endpoint}}/api/users",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create user",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"{{email}}\",\n    \"username\": \"{{username}}\",\n    \"password\": \"{{password}}\",\n    \"passwordConfirmation\": \"{{passwordConfirmation}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{endpoint}}/api/users",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sessions",
+			"item": [
+				{
+					"name": "Create session",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Sets auth token if res status is 200\", function () {",
+									"    if (pm.response.code === 200) {",
+									"        const res = pm.response.json();",
+									"        const token = res.token;",
+									"        const refreshToken = res.refreshToken;",
+									"        pm.collectionVariables.set(\"token\", token);",
+									"        pm.collectionVariables.set(\"refreshToken\", refreshToken);",
+									"    }",
+									"})",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"{{username}}\",\n    \"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{endpoint}}/api/sessions",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"api",
+								"sessions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user sessions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{endpoint}}/api/sessions",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"api",
+								"sessions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete session",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "x-refresh",
+								"value": "{{refreshToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{endpoint}}/api/sessions",
+							"host": [
+								"{{endpoint}}"
+							],
+							"path": [
+								"api",
+								"sessions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "username",
+			"value": "kchn9",
+			"type": "string"
+		},
+		{
+			"key": "password",
+			"value": "sTr0nk!PAsw0rd",
+			"type": "string"
+		},
+		{
+			"key": "passwordConfirmation",
+			"value": "sTr0nk!PAsw0rd",
+			"type": "string"
+		},
+		{
+			"key": "email",
+			"value": "good@lookingemail.com",
+			"type": "string"
+		},
+		{
+			"key": "endpoint",
+			"value": "localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "<sets after successfull session creation>",
+			"type": "string"
+		},
+		{
+			"key": "refreshToken",
+			"value": "<sets after successfull session creation>",
+			"type": "string"
+		},
+		{
+			"key": "newProductName",
+			"value": "Panasonic Lumix DC-GH5M2",
+			"type": "string"
+		},
+		{
+			"key": "newProductQuantity",
+			"value": "50",
+			"type": "string"
+		},
+		{
+			"key": "newProductPrice",
+			"value": "1000",
+			"type": "string"
+		},
+		{
+			"key": "newProductDescription",
+			"value": "The Panasonic Lumix DC-GH5 Mark II is an updated version of the company's most video-focused Micro Four Thirds camera; the GH5. It offers increased capabilities over the original model and will eventually sell alongside a higher-end GH6 model, whose development was announced at the same time.",
+			"type": "string"
+		},
+		{
+			"key": "newProductImage",
+			"value": "https://2.img-dpreview.com/files/p/E~TS1180x0~articles/6043990845/Panasonic_Lumix_DC-GH5_II.jpeg",
+			"type": "string"
+		},
+		{
+			"key": "productId",
+			"value": "<sets after successfull product creating>",
+			"type": "string"
+		}
+	]
+}
